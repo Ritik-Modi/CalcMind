@@ -1,0 +1,12 @@
+{
+  "name": "calcmind-mern-ts",
+  "private": true,
+  "version": "2.0.0",
+  "description": "MERN + TypeScript AI Calculator",
+  "scripts": {
+    "dev": "npm run dev:server",
+    "dev:client": "npm --prefix client run dev",
+    "dev:server": "npm --prefix server run dev",
+    "build": "npm --prefix client run build && npm --prefix server run build"
+  }
+}

@@ -1,0 +1,22 @@
+# dependencies
+node_modules/
+
+# environments
+.env
+.env.local
+
+# builds
+dist/
+dist-tsc/
+build/
+
+# IDEs and OS files
+.vscode/
+.idea/
+.DS_Store
+*.pem
+
+# logging
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

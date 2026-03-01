@@ -1,38 +1,43 @@
-# CalcMind (Project 1) - MERN + TypeScript + AI SDK
+# CalcMind - Premium AI-Powered Calculator
 
-Project 1 is now upgraded to the target stack standard you requested:
-- MongoDB
-- Express (TypeScript)
-- React (TypeScript + Vite)
-- Node.js
+CalcMind is a full-stack MERN application with a premium dark-mode UI, secure Auth0 authentication, and AI-powered calculation explanations.
 
-It also includes an AI explanation endpoint using AI SDK.
+## Tech Stack
+- **Frontend:** React, TypeScript, Vite
+- **Backend:** Node.js, Express, TypeScript
+- **Database:** MongoDB
+- **Authentication:** Auth0
+- **AI Integration:** OpenAI (`@ai-sdk/openai`)
 
-## Structure
+## Core Features
 
-- `client/` React + TypeScript app
-- `server/` Express + TypeScript API
-- legacy files (`index.html`, `main.js`, `style.css`, `server.js`) are kept for reference only
+1. **Premium User Interface**
+   - High-end dark mode design with vibrant gradient orbs and glassmorphism paneling.
+   - Smooth CSS animations and responsive layout.
+   - Custom minimal logo design integrated.
+2. **Secure Authentication (Auth0)**
+   - Sign in/up flows using Auth0 Universal Login.
+   - JWT validation on all secure backend API routes (`express-oauth2-jwt-bearer`).
+3. **Safe Calculation Engine**
+   - No unsafe `eval()` used.
+   - Custom Tokenizer and Shunting-yard (RPN conversion) implementation.
+   - Deterministic evaluator with step-by-step logging.
+4. **Per-User History Tracking**
+   - Saves calculation history securely to MongoDB.
+   - Associates calculations with Auth0 `userId` to ensure data privacy.
+   - Fallback in-memory history when MongoDB is disabled.
+5. **AI Explanation Endpoint**
+   - AI breaks down the user's mathematical expression step-by-step.
+   - Explanations are hidden until the user is securely authenticated.
 
-## Implemented Features
+## Project Structure
 
-1. Safe calculation engine (no `eval`)
-   - Tokenizer
-   - Shunting-yard (RPN conversion)
-   - Deterministic evaluator with step logs
-2. AI explain endpoint
-   - `POST /api/v1/ai/explain`
-   - Uses `ai` + `@ai-sdk/openai`
-   - Fallback explanation when key is missing
-3. History endpoint
-   - `GET /api/v1/history`
-   - Uses MongoDB if connected, otherwise in-memory fallback
-4. Backend calculation endpoint
-   - `POST /api/v1/calculate`
+- `client/` - React frontend application.
+- `server/` - Express backend API.
 
-## Run
+## Local Development
 
-### 1) Server
+### 1) Backend API setup
 ```bash
 cd server
 cp .env.example .env
@@ -40,38 +45,40 @@ npm install
 npm run dev
 ```
 
-### 2) Client
+*Required Environment Variables (`server/.env`):*
+```env
+PORT=4001
+MONGO_URI=mongodb_connection_string
+OPENAI_API_KEY=your_openai_key
+OPENAI_MODEL=gpt-4o-mini
+CLIENT_ORIGIN=http://localhost:5173
+
+# Auth0 Configuration
+AUTH0_AUDIENCE=your_auth0_management_api_identifier
+AUTH0_ISSUER_BASE_URL=https://your_auth0_domain/
+```
+
+### 2) Frontend Client setup
 ```bash
 cd client
+cp .env.example .env
 npm install
 npm run dev
 ```
 
-Client default: `http://localhost:5173`  
-Server default: `http://localhost:4001`
-
-## Server Env
-
-`server/.env.example`
-
+*Required Environment Variables (`client/.env`):*
 ```env
-PORT=4001
-MONGO_URI=
-OPENAI_API_KEY=
-OPENAI_MODEL=gpt-4o-mini
-CLIENT_ORIGIN=http://localhost:5173
+VITE_API_BASE_URL=http://localhost:4001/api/v1
+
+# Auth0 Configuration
+VITE_AUTH0_DOMAIN=your_auth0_domain
+VITE_AUTH0_CLIENT_ID=your_auth0_client_id
+VITE_AUTH0_AUDIENCE=your_auth0_management_api_identifier
 ```
 
 ## API Summary
 
-- `GET /health`
-- `POST /api/v1/calculate`
-  - body: `{ "expression": "12/(2+1)" }`
-- `POST /api/v1/ai/explain`
-  - body: `{ "expression": "12/(2+1)", "result": 4, "steps": ["2 + 1 = 3", "12 / 3 = 4"] }`
-- `GET /api/v1/history`
-
-## Portfolio Story
-
-Before: basic calculator with unsafe `eval`.  
-After: production-style MERN + TS architecture with backend computation, AI explainability, and persistence-ready history.
+- `GET /health` - Health check and configuration status.
+- `POST /api/v1/calculate` (Secured) - Evaluates expression and saves history.
+- `POST /api/v1/ai/explain` (Secured) - Generates AI explanation.
+- `GET /api/v1/history` (Secured) - Retrieves computation history for the authenticated user.
